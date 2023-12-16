@@ -1,0 +1,4 @@
+michael,racecar,true
+michael,civic,true
+michael,madam,true
+mike,civil,false
