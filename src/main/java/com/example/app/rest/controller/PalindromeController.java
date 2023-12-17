@@ -15,6 +15,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
+/**
+ * Controller class containing routing logic and get request.
+ */
 @RestController
 public class PalindromeController {
 
