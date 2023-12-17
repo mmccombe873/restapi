@@ -11,24 +11,38 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
+/**
+ * Populates the cache with the values stored in results.txt when the app is started.
+ */
 @Component
 public class CacheInitialiser {
 
+    // Dependency injection, instantiates a cacheManager bean
     @Autowired
     private CacheManager cacheManager;
 
+    /**
+     * Added to verify that cache is initialised.
+     */
+    public CacheInitialiser() {
+        System.out.println("CacheInitialiser bean created");
+    }
+
+    /**
+     * This is executed after the bean is constructed to populate the cache.
+     */
     @PostConstruct
     public void initialiseCache() {
         try {
             List<String> lines = Files.readAllLines(Path.of("results.txt"));
-
+            // split each line into its components
             for (String line : lines) {
                 String[] parts = line.split(",");
-                if (parts.length == 4) {
+                if (parts.length == 3) {
                     String username = parts[0];
                     String data = parts[1];
                     boolean isPalindrome = Boolean.parseBoolean(parts[2]);
-                    String key = username + '/' + data;
+                    String key = "/" + data;
 
                     // Create a PalindromeResponse and put it into the cache
                     PalindromeResponse response = new PalindromeResponse(username, data, isPalindrome, 200);

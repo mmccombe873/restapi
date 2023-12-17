@@ -18,23 +18,17 @@ public class PalindromeService {
         // Call getters from request model class
         String username = request.getUsername();
         String data = request.getData();
-        // Check inputs are valid
-        String validationError = validateInput(username, data);
-        // If the error is null, check whether the input data is a palindrome or not.
-        if (validationError == null) {
-            // Reverse the string and compare to the original data
-            String reversed = new StringBuilder(data).reverse().toString();
-            boolean isPalindrome = data.equals(reversed);
-            // Return a response object showing whether the input data is a palindrome or not.
-            if (isPalindrome) {
-                return new PalindromeResponse(username, data,true, 200);
-            } else {
-                return new PalindromeResponse(username, data, false, 200);
-            }
+
+        // Reverse the string and compare to the original data
+        String reversed = new StringBuilder(data).reverse().toString();
+        boolean isPalindrome = data.equals(reversed);
+        // Return a response object showing whether the input data is a palindrome or not.
+        if (isPalindrome) {
+            return new PalindromeResponse(username, data,true, 200);
         } else {
-            // Return an error message and status code for invalid inputs
-            return new PalindromeResponse(validationError, 400);
+            return new PalindromeResponse(username, data, false, 200);
         }
+
     }
 
     /**
@@ -42,8 +36,8 @@ public class PalindromeService {
      * @param username - The username from the GET request
      * @param data - The data from the GET request
      */
-    String validateInput(String username, String data) {
-        if (username == null || username == "" || data == null || data == "") {
+    public String validateInput(String username, String data) {
+        if (username == null || username.equals("") || data == null || data.equals("")) {
             return "Username and data must not be empty.";
         } else if (username.matches(".*\\d.*") || data.matches(".*\\d.*")) {
             return "Input must not contain digits.";
@@ -55,4 +49,5 @@ public class PalindromeService {
             return null; // Input is valid
         }
     }
+
 }

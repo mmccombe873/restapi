@@ -3,8 +3,6 @@ package com.example.app.rest.controller;
 import com.example.app.rest.models.PalindromeRequest;
 import com.example.app.rest.models.PalindromeResponse;
 import com.example.app.rest.service.PalindromeService;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,12 +18,18 @@ import java.nio.file.StandardOpenOption;
 @RestController
 public class PalindromeController {
 
+    // Dependency injection, instantiates a palindromeService bean
     @Autowired
     private PalindromeService palindromeService;
 
+    // Dependency injection, instantiates a cacheManager bean
     @Autowired
     private CacheManager cacheManager;
 
+    /**
+     * Mapping for default path
+     * @return
+     */
     @GetMapping("/")
     @ResponseBody
     public String welcome() {
@@ -33,6 +37,12 @@ public class PalindromeController {
         return "Welcome! Please append a username and data in the URL in the format /username/data to generate a response.";
     }
 
+    /**
+     * Mapping for URL with inputs appended. Gets username and palindrome from URL.
+     * @param username
+     * @param data
+     * @return
+     */
     @GetMapping("/{username}/{data}")
     @ResponseBody
     public PalindromeResponse getPalindrome(@PathVariable String username, @PathVariable String data) {
@@ -40,21 +50,28 @@ public class PalindromeController {
         request.setUsername(username);
         request.setData(data);
 
-        // Check if result is already stored
-        Pair<String, Boolean> cachedResult = readFromFile(data);
-        System.out.println("Checking cache for " + data);
+        String validationError = palindromeService.validateInput(username, data);
 
-        if (cachedResult != null) {
-            // Result is already stored in cache
-            boolean isPalindrome = cachedResult.getRight();
-            String storedUsername = cachedResult.getLeft();
-            System.out.println("Result already stored in cache by " + storedUsername + ": " + data + "," + isPalindrome);
-            return new PalindromeResponse(username, data, isPalindrome, 200);
+        if (validationError != null) {
+            System.out.println("Invalid username or data. Result not returned.");
+            return new PalindromeResponse(validationError, 400);
+        }
+
+        // Read from the cache
+        String cacheKey = '/' + data;
+        PalindromeResponse cachedResponse = cacheManager.getCache("palindromeCache").get(cacheKey, PalindromeResponse.class);
+
+        if (cachedResponse != null) {
+            // Result is already stored in cache, show user who stored it in log output.
+            System.out.println("Result already stored in cache by " + cachedResponse.getUsername() + ": " + data + "," + cachedResponse.isPalindrome());
+            return cachedResponse;
         } else {
             // Perform the palindrome check
             PalindromeResponse response = palindromeService.checkPalindrome(request);
-            // Store the result, including the boolean value
-            if(response.getStatusCode() == 200) {
+
+            // Store valid inputs including the palindrome check in the cache
+            if (response.getStatusCode() == 200) {
+                cacheManager.getCache("palindromeCache").put(cacheKey, response);
                 storeResultToFile(username, data, response.isPalindrome());
             } else {
                 System.out.println("Input error. Result not stored.");
@@ -63,6 +80,12 @@ public class PalindromeController {
         }
     }
 
+    /**
+     * Stores the username, data, and palindrome boolean in a text file.
+     * @param username
+     * @param data
+     * @param isPalindrome
+     */
     private void storeResultToFile(String username, String data, boolean isPalindrome) {
         try {
             String filePath = "results.txt";
@@ -81,29 +104,6 @@ public class PalindromeController {
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Error storing result to file.");
-        }
-    }
-
-
-    private Pair<String, Boolean> readFromFile(String data) {
-        try {
-            String filePath = "results.txt";
-            String expectedData = "," + data + ",";
-
-            return Files.lines(Path.of(filePath))
-                    .filter(line -> line.contains(expectedData))
-                    .findFirst()
-                    .map(line -> {
-                        String[] parts = line.split(",");
-                        String storedUsername = parts[0];
-                        boolean isPalindrome = Boolean.parseBoolean(parts[2]);
-                        return new ImmutablePair<>(storedUsername, isPalindrome);
-                    })
-                    .orElse(null);
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Error reading result from file.");
-            return null;
         }
     }
 }

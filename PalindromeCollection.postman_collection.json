@@ -1,0 +1,150 @@
+{
+	"info": {
+		"_postman_id": "92430f0e-d4c5-49c1-a1a8-cdb0ff888f8c",
+		"name": "PalindromeCollection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31764066"
+	},
+	"item": [
+		{
+			"name": "http://localhost:8080/michael/civic",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/michael/civic",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"michael",
+						"civic"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/michael/madam",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/michael/madam",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"michael",
+						"madam"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/mike/civic",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/mike/civic",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"mike",
+						"civic"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/mike/civil",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/mike/civil",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"mike",
+						"civil"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/mike/NursesRun!",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/mike/NursesRun!",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"mike",
+						"NursesRun!"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/mike/race car",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/mike/race car",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"mike",
+						"race car"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/mike/1234321",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/mike/1234321",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"mike",
+						"1234321"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
